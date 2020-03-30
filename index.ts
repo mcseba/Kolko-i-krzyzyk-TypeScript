@@ -1,5 +1,5 @@
 class Board {
-    table: Array<Cell>;
+    table: Array<HTMLElement>;
     turn: boolean = true; // true dla 'X', false dla 'O'
 
     readonly text = document.getElementById('moves');
@@ -14,58 +14,39 @@ class Board {
         [2, 4, 6]
     ];
 
-    constructor (Table: Array<Cell>) {
+    constructor (Table: Array<HTMLElement>) {
         this.table = Table;
     }
-
-    PlayerMove() {
-        if (this.turn == true) { // X ma ruch
-            this.table.forEach(element => {
-                element.move = 'X';
-            });
-            this.turn = false;
-            this.text.innerHTML = "Ruch: O"
-        } else {
-            this.table.forEach(element => {
-                element.move = 'O';
-            });
-            this.turn = true;
-            this.text.innerHTML = "Ruch: X"
-        }   
-    }
+   
 }
 
 class Cell {
     cell: HTMLElement;
-    move: string;
+    move: string = 'X';
 
     constructor (button: HTMLElement) {
         this.cell = button;
-        this.cell.addEventListener('click', this.Mark);
-    }
-
-    handleClick(move: string) {
-        this.move = move;
+        console.log('utworzono');
     }
 
     Mark() {
-        this.cell.innerText = this.move;
-        console.log('done');
+        console.log(this.cell);
+        this.cell.innerHTML = this.move;
     }
 }
 
-const table: Array<Cell> = [];
+const table: Array<HTMLElement> = [];
 
-const cell1 = new Cell(document.getElementById('buttonCell1'));
-const cell2 = new Cell(document.getElementById('buttonCell2'));
-const cell3 = new Cell(document.getElementById('buttonCell3'));
-const cell4 = new Cell(document.getElementById('buttonCell4'));
-const cell5 = new Cell(document.getElementById('buttonCell5'));
-const cell6 = new Cell(document.getElementById('buttonCell6'));
-const cell7 = new Cell(document.getElementById('buttonCell7'));
-const cell8 = new Cell(document.getElementById('buttonCell8'));
-const cell9 = new Cell(document.getElementById('buttonCell9'));
+const Cell1 = new Cell(document.getElementById('buttonCell1'));
+const Cell2 = new Cell(document.getElementById('buttonCell2'));
+const Cell3 = new Cell(document.getElementById('buttonCell3'));
+const Cell4 = new Cell(document.getElementById('buttonCell4'));
+const Cell5 = new Cell(document.getElementById('buttonCell5'));
+const Cell6 = new Cell(document.getElementById('buttonCell6'));
+const Cell7 = new Cell(document.getElementById('buttonCell7'));
+const Cell8 = new Cell(document.getElementById('buttonCell8'));
+const Cell9 = new Cell(document.getElementById('buttonCell9'));
 
-table.push(cell1, cell2, cell3, cell4, cell5, cell6, cell7, cell8, cell9);
+table.push(Cell1.cell, Cell2.cell, Cell3.cell, Cell4.cell, Cell5.cell, Cell6.cell, Cell7.cell, Cell8.cell, Cell9.cell);
 
 const Game = new Board(table);
