@@ -1,0 +1,11 @@
+.table {
+    position: relative;
+    top: 3vw;
+    width: 170px;
+    height: 170px;
+}
+
+button {
+    width: 50px;
+    height: 50px;
+}

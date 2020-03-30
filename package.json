@@ -1,0 +1,22 @@
+{
+  "name": "kolko-i-krzyzyk-typescript",
+  "version": "1.0.0",
+  "description": "TicTacToe Game",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mcseba/Kolko-i-krzyzyk-TypeScript.git"
+  },
+  "author": "Sebastian Rajtar",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mcseba/Kolko-i-krzyzyk-TypeScript/issues"
+  },
+  "homepage": "https://github.com/mcseba/Kolko-i-krzyzyk-TypeScript#readme",
+  "dependencies": {
+    "ts-loader": "^6.2.2"
+  }
+}
