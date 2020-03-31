@@ -53,8 +53,10 @@ var Board = (function () {
         for (var i = 0; i < this.table.length; i++) {
             this.board[i] = 0;
             this.table[i].cell.innerHTML = "";
-            this.move = 'X';
+            this.table[i].cell.style.backgroundColor = "white";
         }
+        this.move = 'X';
+        this.textMove.innerHTML = this.move;
         this.startGame = true;
     };
     Board.prototype.checkIfWin = function () {
@@ -63,6 +65,9 @@ var Board = (function () {
             if (_this.board[element[0]] == 1) {
                 if (_this.board[element[1]] == 1) {
                     if (_this.board[element[2]] == 1) {
+                        _this.table[element[0]].cell.style.backgroundColor = "green";
+                        _this.table[element[1]].cell.style.backgroundColor = "green";
+                        _this.table[element[2]].cell.style.backgroundColor = "green";
                         _this.alertWin('X');
                     }
                 }
@@ -70,6 +75,9 @@ var Board = (function () {
             else if (_this.board[element[0]] == 2) {
                 if (_this.board[element[1]] == 2) {
                     if (_this.board[element[2]] == 2) {
+                        _this.table[element[0]].cell.style.backgroundColor = "green";
+                        _this.table[element[1]].cell.style.backgroundColor = "green";
+                        _this.table[element[2]].cell.style.backgroundColor = "green";
                         _this.alertWin('O');
                     }
                 }
