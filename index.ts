@@ -20,6 +20,7 @@ class Cell {
  */
 class Board {
     cells: Cell[];
+    winningCond: number;
     currentMove: number = 0; // 0 is default, 1 for X, 2 for O
     scoreText: HTMLElement;
     start: boolean = false;
@@ -29,9 +30,11 @@ class Board {
 /**
  * @constructor Enables resize of the board. Creates this board and adds event handlers for buttons
  * @param size Size of the board (SIZE x SIZE). Default value equals 3.
+ * @param winningCond Defines how many symbols should be in a row to win. Default value equals 3.
  */
-    constructor(size: number = 3) {
+    constructor(size: number = 3, winningCond: number = 3) {
         this.cells = new Array(size);
+        this.winningCond = winningCond;
 
         let table = <HTMLTableElement>document.getElementById('board');
         let i = 0;
@@ -69,6 +72,8 @@ class Board {
             alert('This cell is already clicked! Pick another option.')
         } else
             this.scoreText.innerHTML = "Move: Click START button to start!";
+
+        this.checkIfWin();
     }
 
     Start() {
@@ -88,6 +93,10 @@ class Board {
         this.start = false;
         this.currentMove = 0;
         this.scoreText.innerHTML = 'Move: ';
+    }
+
+    checkIfWin() {
+        console.log(this.cells);
     }
 }
 

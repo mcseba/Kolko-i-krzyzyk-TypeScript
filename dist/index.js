@@ -9,12 +9,14 @@ var Cell = (function () {
     return Cell;
 }());
 var Board = (function () {
-    function Board(size) {
+    function Board(size, winningCond) {
         var _this = this;
         if (size === void 0) { size = 3; }
+        if (winningCond === void 0) { winningCond = 3; }
         this.currentMove = 0;
         this.start = false;
         this.cells = new Array(size);
+        this.winningCond = winningCond;
         var table = document.getElementById('board');
         var i = 0;
         for (var x = 0; x < size; x++) {
@@ -56,6 +58,7 @@ var Board = (function () {
         }
         else
             this.scoreText.innerHTML = "Move: Click START button to start!";
+        this.checkIfWin();
     };
     Board.prototype.Start = function () {
         if (this.start == false) {
@@ -73,6 +76,9 @@ var Board = (function () {
         this.start = false;
         this.currentMove = 0;
         this.scoreText.innerHTML = 'Move: ';
+    };
+    Board.prototype.checkIfWin = function () {
+        console.log(this.cells);
     };
     return Board;
 }());
