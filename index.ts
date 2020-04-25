@@ -1,143 +1,94 @@
+/**
+ * Class holding one single cell of the board. It enables setting the value of this cell (either X or O).
+ */
+class Cell {
+    cellValue: number;
+    cell: HTMLElement;
+
+    constructor (cell: HTMLElement) {
+        this.cell = cell;
+    }
+
+    setValue(value: number) {
+        this.cellValue = value;
+        value === 1 ? this.cell.innerHTML = 'X' : this.cell.innerHTML = 'O';       
+    }
+}
+
+/**
+ * Class for managing course of the game. It holds array containing all the cells and shares methods for managing game.
+ */
 class Board {
-    table: Array<Cell>;
-    move: string = 'X';
-    textMove: HTMLElement; // HTMLowy tekst h3 do wypisywania ruchow i wyniku
-    board: number[] = [0, 0, 0, 0, 0, 0, 0, 0, 0]; //0 puste pole, 1 dla X, 2 dla O
-    startGame: boolean = false;
+    cells: Cell[];
+    currentMove: number = 0; // 0 is default, 1 for X, 2 for O
+    scoreText: HTMLElement;
+    start: boolean = false;
+    startButton: HTMLElement;
+    resetButton: HTMLElement;
 
-    readonly winningConditions = [
-        [0, 1, 2],
-        [3, 4, 5],
-        [6, 7, 8],
-        [0, 3, 6],
-        [1, 4, 7],
-        [2, 5, 8],
-        [0, 4, 8],
-        [2, 4, 6]
-    ];
+/**
+ * @constructor Enables resize of the board. Creates this board and adds event handlers for buttons
+ * @param size Size of the board (SIZE x SIZE). Default value equals 3.
+ */
+    constructor(size: number = 3) {
+        this.cells = new Array(size);
 
-    constructor (table: Array<Cell>, textMove: HTMLElement) {
-        this.table = table;
-        this.textMove = textMove;
-    }
+        let table = <HTMLTableElement>document.getElementById('board');
+        let i = 0;
+        for (let x = 0; x < size; x++) {
+            let row = table.insertRow(x);
 
-    handleClick(x: number, y: number) {
-        let i = 3*(x - 1) + (y - 1); // do wyszukiwania indeksu w tablicy
-    if (this.startGame == true)
-    {
-        if (this.move == 'X' && this.board[i] == 0) {
-            this.table[i].cell.innerHTML = this.move;
-            this.board[i] = 1;
-            this.move = 'O';
-            this.textMove.innerHTML = this.move;
-            this.checkIfWin();
-        } else if (this.move == 'O' && this.board[i] == 0) {
-            this.table[i].cell.innerHTML = this.move;
-            this.board[i] = 2;
-            this.move = 'X';
-            this.textMove.innerHTML = this.move;
-            this.checkIfWin();
-        } else {
-            alert('To pole jest już zajęte!');
+            for (let y = 0; y < size; y++) {
+                let cell = <HTMLTableCellElement>row.insertCell(y);
+                cell.className = "cell";
+                const newCell = new Cell(cell);
+                newCell.cellValue = 0;
+                this.cells[i] = newCell;
+                newCell.cell.addEventListener('click', () => this.makeMove(newCell), false);
+                i++
+            }
         }
-    } else {
-        alert('Kliknij START aby zacząć.');
+        this.scoreText = document.getElementById('score');
+        this.startButton = document.getElementById('start');
+        this.startButton.addEventListener('click', () => this.Start());
+        this.resetButton = document.getElementById('reset');
+        this.resetButton.addEventListener('click', () => this.Reset());
     }
+
+    makeMove(cell: Cell) {
+        if (this.start === true && cell.cellValue == 0) {
+            cell.setValue(this.currentMove);
+            if(this.currentMove === 1) {
+                this.currentMove = 2;
+                this.scoreText.innerHTML = "Move: O"
+            } else {
+                this.currentMove = 1;
+                this.scoreText.innerHTML = "Move: X";
+            }           
+        } else if(this.start === true && cell.cellValue != 0) {
+            alert('This cell is already clicked! Pick another option.')
+        } else
+            this.scoreText.innerHTML = "Move: Click START button to start!";
     }
 
     Start() {
-        if (this.startGame == false) {
-            this.startGame = true;
-        } else {
-            alert('Gra jest w trakcie rozgrywki!');
+        if (this.start == false) {
+            console.log('START');
+            this.start = true;
+            this.currentMove = 1;
+            this.scoreText.innerHTML = "Move: X";
         }
     }
 
     Reset() {
-        for (let i = 0; i < this.table.length; i++) {
-            this.board[i] = 0;
-            this.table[i].cell.innerHTML = "";
-            this.table[i].cell.style.backgroundColor = "white";
-        }
-        this.move = 'X';
-        this.textMove.innerHTML = this.move;
-        this.startGame = true;
-    }
-
-    checkIfWin() {
-        this.winningConditions.forEach(element => {
-            if (this.board[element[0]] == 1) { // DLA 'X'
-                if (this.board[element[1]] == 1) {
-                    if (this.board[element[2]] == 1) {
-                        this.table[element[0]].cell.style.backgroundColor = "green";
-                        this.table[element[1]].cell.style.backgroundColor = "green";
-                        this.table[element[2]].cell.style.backgroundColor = "green";
-                        this.alertWin('X');
-                    }
-                }
-            } else if (this.board[element[0]] == 2) { // DLA 'O'
-                if (this.board[element[1]] == 2) {
-                    if (this.board[element[2]] == 2) {
-                        this.table[element[0]].cell.style.backgroundColor = "green";
-                        this.table[element[1]].cell.style.backgroundColor = "green";
-                        this.table[element[2]].cell.style.backgroundColor = "green";
-                        this.alertWin('O');
-                    }
-                }
-            }
+        this.cells.forEach(element => {
+            element.cell.innerHTML = '';
+            element.cellValue = 0;
         });
-    }
-
-    alertWin(win: string) {
-        alert('Gratulacje! Gra skończona, wygrał Player' + win)
-        this.textMove.innerHTML = "Wygrał Player: " + win;
-        this.startGame = false;
+        this.start = false;
+        this.currentMove = 0;
+        this.scoreText.innerHTML = 'Move: ';
     }
 }
 
-class Cell {
-    cell: HTMLElement;
-    
-    constructor (button: HTMLElement) {
-        this.cell = button;
-    }
-}
-
-const button1 = <HTMLElement>document.getElementById('buttonCell1');
-const button2 = <HTMLElement>document.getElementById('buttonCell2');
-const button3 = <HTMLElement>document.getElementById('buttonCell3');
-const button4 = <HTMLElement>document.getElementById('buttonCell4');
-const button5 = <HTMLElement>document.getElementById('buttonCell5');
-const button6 = <HTMLElement>document.getElementById('buttonCell6');
-const button7 = <HTMLElement>document.getElementById('buttonCell7');
-const button8 = <HTMLElement>document.getElementById('buttonCell8');
-const button9 = <HTMLElement>document.getElementById('buttonCell9');
-let text = document.getElementById('moves');
-
-const start: HTMLButtonElement = <HTMLButtonElement>document.getElementById('start');
-const reset: HTMLButtonElement = <HTMLButtonElement>document.getElementById('reset');
-
-let Cell11 = new Cell(button1);
-let Cell12 = new Cell(button2);
-let Cell13 = new Cell(button3);
-let Cell21 = new Cell(button4);
-let Cell22 = new Cell(button5);
-let Cell23 = new Cell(button6);
-let Cell31 = new Cell(button7);
-let Cell32 = new Cell(button8);
-let Cell33 = new Cell(button9);
-
-let GameBoard = new Board([Cell11, Cell12, Cell13, Cell21, Cell22, Cell23, Cell31, Cell32, Cell33], text);
-
-start.onclick = () => GameBoard.Start();
-reset.onclick = () => GameBoard.Reset();
-Cell11.cell.onclick = () => GameBoard.handleClick(1, 1);
-Cell12.cell.onclick = () => GameBoard.handleClick(1, 2);
-Cell13.cell.onclick = () => GameBoard.handleClick(1, 3);
-Cell21.cell.onclick = () => GameBoard.handleClick(2, 1);
-Cell22.cell.onclick = () => GameBoard.handleClick(2, 2);
-Cell23.cell.onclick = () => GameBoard.handleClick(2, 3);
-Cell31.cell.onclick = () => GameBoard.handleClick(3, 1);
-Cell32.cell.onclick = () => GameBoard.handleClick(3, 2);
-Cell33.cell.onclick = () => GameBoard.handleClick(3, 3);
-
+const board = new Board(5);

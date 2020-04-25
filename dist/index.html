@@ -8,20 +8,15 @@
 </head>
 <body>
 
-    <h1>Gra Kółko i krzyżyk</h1>
-    <h3>Ruch dla:<h3 id="moves">X</h3></h3>
-    <button id="reset">RESET</button>
-    <button id="start">START</button>
-    <div class="table">
-    <button id="buttonCell1"></button>
-    <button id="buttonCell2"></button>
-    <button id="buttonCell3"></button>
-    <button id="buttonCell4"></button>
-    <button id="buttonCell5"></button>
-    <button id="buttonCell6"></button>
-    <button id="buttonCell7"></button>
-    <button id="buttonCell8"></button>
-    <button id="buttonCell9"></button>
+    <div class="game">
+        <h1 class="header">TicTacToe</h1>
+        <table class="tableBoard" id="board">
+        </table>
+        <div class="judge">
+            <button id="reset">RESET</button>
+            <button id="start">START</button>
+            <p id="score">Move: </p>
+        </div>
     </div>
 
     <script src="./index.js"></script>
