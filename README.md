@@ -1,2 +1,2 @@
-﻿# Kolko-i-krzyzyk-TypeScript
+﻿# TICTACTOE - TS
 TicTacToe web game using TypeScript.
