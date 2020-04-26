@@ -2,11 +2,21 @@
  * Class holding one single cell of the board. It enables setting the value of this cell (either X or O).
  */
 class Cell {
+    /**
+     * @property {cellValue} - Holds current value of the cell.
+     * @property {cell} - Holds cell element from the table.
+     * @property {posX} - Number of the row that this cell is in. (Starts from 0)
+     * @property {posY} - Number of the element in the specific row. (Starts from 0)
+     */
     cellValue: number;
     cell: HTMLElement;
+    posX: number;
+    posY: number;
 
-    constructor (cell: HTMLElement) {
+    constructor (cell: HTMLElement, posx: number, posy: number) {
         this.cell = cell;
+        this.posX = posx;
+        this.posY = posy;
     }
 
     /**
@@ -55,7 +65,7 @@ class Board {
             for (let y = 0; y < size; y++) {
                 let cell = <HTMLTableCellElement>row.insertCell(y);
                 cell.className = "cell";
-                const newCell = new Cell(cell);
+                const newCell = new Cell(cell, x, y);
                 newCell.cellValue = 0;
                 this.cells[x][y] = newCell;
                 newCell.cell.addEventListener('click', () => this.makeMove(newCell), false);
@@ -84,7 +94,7 @@ class Board {
                 this.currentMove = 1;
                 this.scoreText.innerHTML = "Move: X";
             }
-            this.checkIfWin();       
+            this.checkIfWin(cell.posX, cell.posY);       
         } else if(this.start === true && cell.cellValue != 0) {
             alert('This cell is already clicked! Pick another option.')
         } else
@@ -119,40 +129,76 @@ class Board {
     }
 
     /**
-     * This methods checks winning conditions after player's move.
+     * This method checks winning conditions every time cell is clicked.
+     * @param indexX Index of row where clicked cell is.
+     * @param indexY Index of the element in the specific row.
      */
-    checkIfWin() {
-        this.checkVertical();
-        this.checkHorizontal();
-        this.checkDiagonally();
-    }
+    checkIfWin(indexX: number, indexY: number) {
 
-    checkVertical() {
-        let count = 0;
-
-        for (let i = 0; i < this.cells.length; i++) {
-            count = 0;
-            for (let j = 0; j < this.cells.length - 1; j++) {
-                if (count === 2) {
-                    this.stopGame();
-                } else {
-                    if (this.cells[j][i].cellValue != 0 && this.cells[j][i].cellValue === this.cells[j+1][i].cellValue) {
-                        count++;
-                    } else {
-                        count = 0;
-                    }
-                }
-            }
-        }
-    }
-
-    checkHorizontal() {
-        let count = 0;
-
+        console.log(indexX, indexY)
         
-    }
+        //pionowo
+        let colSum = 0;
+        for (let i = 1; i < 3; i++) {
+            if (indexX + i <= this.cells.length -1 && this.cells[indexX][indexY].cellValue == this.cells[indexX+i][indexY].cellValue) {
+                colSum++;              
+            } 
+            if (indexX - i >= 0 && this.cells[indexX][indexY].cellValue == this.cells[indexX-i][indexY].cellValue)
+            {
+                colSum++;
+            }
+            if (colSum == 2) {
+                this.stopGame()
+                break;
+            };
+        }
 
-    checkDiagonally() {
+        //poziomo
+        let rowSum = 0;
+        for (let i = 1; i < 3; i++) {
+            if (indexY + i <= this.cells.length -1 && this.cells[indexX][indexY].cellValue == this.cells[indexX][indexY + i].cellValue) {
+                rowSum++;              
+            }
+            if (indexY - i >= 0 && this.cells[indexX][indexY].cellValue == this.cells[indexX][indexY - i].cellValue)
+            {
+                rowSum++;
+            }
+            if (rowSum == 2) {
+                this.stopGame()
+                break;
+            };
+        }
+
+        //na ukos
+        let diagonalSum = 0;
+        for (let i = 1; i < 3; i++) {
+            if (indexY + i <= this.cells.length -1 && this.cells[indexX][indexY].cellValue == this.cells[indexX + i][indexY + i].cellValue) {
+                diagonalSum++;              
+            }
+            if (indexY - i >= 0 && this.cells[indexX][indexY].cellValue == this.cells[indexX - i][indexY - i].cellValue)
+            {
+                diagonalSum++;
+            }
+            if (diagonalSum == 2) {
+                this.stopGame()
+                break;
+            };
+        }
+
+        let antiDiagonalSum = 0;
+        for (let i = 1; i < 3; i++) {
+            if (this.cells[indexX][indexY].cellValue == this.cells[indexX + i][indexY - i].cellValue) {
+                antiDiagonalSum++;              
+            }
+            if (this.cells[indexX][indexY].cellValue == this.cells[indexX - i][indexY + i].cellValue)
+            {
+                antiDiagonalSum++;
+            }
+            if (antiDiagonalSum == 2) {
+                this.stopGame()
+                break;
+            };
+        }
 
     }
 
@@ -163,4 +209,4 @@ class Board {
     }
 }
 
-const board = new Board(9);
+const board = new Board(5);

@@ -1,6 +1,8 @@
 var Cell = (function () {
-    function Cell(cell) {
+    function Cell(cell, posx, posy) {
         this.cell = cell;
+        this.posX = posx;
+        this.posY = posy;
     }
     Cell.prototype.setValue = function (value) {
         this.cellValue = value;
@@ -28,7 +30,7 @@ var Board = (function () {
             var _loop_1 = function (y) {
                 var cell = row.insertCell(y);
                 cell.className = "cell";
-                var newCell = new Cell(cell);
+                var newCell = new Cell(cell, x, y);
                 newCell.cellValue = 0;
                 this_1.cells[x][y] = newCell;
                 newCell.cell.addEventListener('click', function () { return _this.makeMove(newCell); }, false);
@@ -56,7 +58,7 @@ var Board = (function () {
                 this.currentMove = 1;
                 this.scoreText.innerHTML = "Move: X";
             }
-            this.checkIfWin();
+            this.checkIfWin(cell.posX, cell.posY);
         }
         else if (this.start === true && cell.cellValue != 0) {
             alert('This cell is already clicked! Pick another option.');
@@ -82,33 +84,64 @@ var Board = (function () {
         this.start = false;
         this.currentMove = 0;
     };
-    Board.prototype.checkIfWin = function () {
-        this.checkVertical();
-        this.checkHorizontal();
-        this.checkDiagonally();
-    };
-    Board.prototype.checkVertical = function () {
-        var count = 0;
-        for (var i = 0; i < this.cells.length; i++) {
-            count = 0;
-            for (var j = 0; j < this.cells.length - 1; j++) {
-                if (count === 2) {
-                    this.stopGame();
-                }
-                else {
-                    if (this.cells[j][i].cellValue != 0 && this.cells[j][i].cellValue === this.cells[j + 1][i].cellValue) {
-                        count++;
-                    }
-                    else {
-                        count = 0;
-                    }
-                }
+    Board.prototype.checkIfWin = function (indexX, indexY) {
+        console.log(indexX, indexY);
+        var colSum = 0;
+        for (var i = 1; i < 3; i++) {
+            if (indexX + i <= this.cells.length - 1 && this.cells[indexX][indexY].cellValue == this.cells[indexX + i][indexY].cellValue) {
+                colSum++;
             }
+            if (indexX - i >= 0 && this.cells[indexX][indexY].cellValue == this.cells[indexX - i][indexY].cellValue) {
+                colSum++;
+            }
+            if (colSum == 2) {
+                this.stopGame();
+                break;
+            }
+            ;
         }
-    };
-    Board.prototype.checkHorizontal = function () {
-    };
-    Board.prototype.checkDiagonally = function () {
+        var rowSum = 0;
+        for (var i = 1; i < 3; i++) {
+            if (indexY + i <= this.cells.length - 1 && this.cells[indexX][indexY].cellValue == this.cells[indexX][indexY + i].cellValue) {
+                rowSum++;
+            }
+            if (indexY - i >= 0 && this.cells[indexX][indexY].cellValue == this.cells[indexX][indexY - i].cellValue) {
+                rowSum++;
+            }
+            if (rowSum == 2) {
+                this.stopGame();
+                break;
+            }
+            ;
+        }
+        var diagonalSum = 0;
+        for (var i = 1; i < 3; i++) {
+            if (indexY + i <= this.cells.length - 1 && this.cells[indexX][indexY].cellValue == this.cells[indexX + i][indexY + i].cellValue) {
+                diagonalSum++;
+            }
+            if (indexY - i >= 0 && this.cells[indexX][indexY].cellValue == this.cells[indexX - i][indexY - i].cellValue) {
+                diagonalSum++;
+            }
+            if (diagonalSum == 2) {
+                this.stopGame();
+                break;
+            }
+            ;
+        }
+        var antiDiagonalSum = 0;
+        for (var i = 1; i < 3; i++) {
+            if (this.cells[indexX][indexY].cellValue == this.cells[indexX + i][indexY - i].cellValue) {
+                antiDiagonalSum++;
+            }
+            if (this.cells[indexX][indexY].cellValue == this.cells[indexX - i][indexY + i].cellValue) {
+                antiDiagonalSum++;
+            }
+            if (antiDiagonalSum == 2) {
+                this.stopGame();
+                break;
+            }
+            ;
+        }
     };
     Board.prototype.stopGame = function () {
         this.currentMove === 1 ? this.scoreText.innerHTML = "O has won the game!" :
@@ -117,4 +150,4 @@ var Board = (function () {
     };
     return Board;
 }());
-var board = new Board(9);
+var board = new Board(5);

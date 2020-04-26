@@ -3,6 +3,7 @@
 }
 
 .game {
+    margin-left: 20%;
     width: 500px;
     height: fit-content;
     background-color: rgb(247, 247, 247);
