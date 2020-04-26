@@ -137,7 +137,7 @@ class Board {
 
         console.log(indexX, indexY)
         
-        //pionowo
+        //vertical check
         let colSum = 0;
         for (let i = 1; i < 3; i++) {
             if (indexX + i <= this.cells.length -1 && this.cells[indexX][indexY].cellValue == this.cells[indexX+i][indexY].cellValue) {
@@ -153,7 +153,7 @@ class Board {
             };
         }
 
-        //poziomo
+        //horizontal check
         let rowSum = 0;
         for (let i = 1; i < 3; i++) {
             if (indexY + i <= this.cells.length -1 && this.cells[indexX][indexY].cellValue == this.cells[indexX][indexY + i].cellValue) {
@@ -169,7 +169,7 @@ class Board {
             };
         }
 
-        //na ukos
+        //diagonal check
         let diagonalSum = 0;
         for (let i = 1; i < 3; i++) {
             if (indexY + i <= this.cells.length -1 && this.cells[indexX][indexY].cellValue == this.cells[indexX + i][indexY + i].cellValue) {
@@ -185,6 +185,7 @@ class Board {
             };
         }
 
+        //anti diagonal check
         let antiDiagonalSum = 0;
         for (let i = 1; i < 3; i++) {
             if (this.cells[indexX][indexY].cellValue == this.cells[indexX + i][indexY - i].cellValue) {
