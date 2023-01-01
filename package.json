@@ -17,6 +17,6 @@
   },
   "homepage": "https://github.com/mcseba/Kolko-i-krzyzyk-TypeScript#readme",
   "dependencies": {
-    "ts-loader": "^6.2.2"
+    "ts-loader": "^9.4.2"
   }
 }
